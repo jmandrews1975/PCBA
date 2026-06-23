@@ -504,7 +504,43 @@
       display: none; background: none; border: none; cursor: pointer;
       flex-direction: column; gap: 5px; padding: 4px;
     }
-    .nav-mobile-toggle span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; }
+    .nav-mobile-toggle span {
+      display: block; width: 24px; height: 2px; background: var(--white);
+      border-radius: 2px; transition: transform 0.25s, opacity 0.25s;
+    }
+    .nav-mobile-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-mobile-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-mobile-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── MOBILE DRAWER ───────────────────────────────── */
+    .nav-drawer {
+      display: none;
+      position: fixed; left: 0; right: 0; z-index: 98;
+      background: rgba(18,30,52,0.98);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(200,169,126,0.2);
+      padding: 1rem 1.5rem 1.5rem;
+      flex-direction: column; gap: 0.25rem;
+      top: 68px;
+    }
+    body.has-announcement .nav-drawer { top: calc(68px + 36px); }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer a {
+      font-size: 1rem; font-weight: 500; color: rgba(255,255,255,0.8);
+      text-decoration: none; padding: 0.75rem 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      letter-spacing: 0.02em; transition: color 0.15s;
+    }
+    .nav-drawer a:last-child { border-bottom: none; }
+    .nav-drawer a:hover { color: var(--white); }
+    .nav-drawer .drawer-cta {
+      margin-top: 0.75rem;
+      background: var(--gold); color: var(--night) !important;
+      font-weight: 700 !important; border-radius: 6px;
+      text-align: center; padding: 0.9rem !important;
+      border-bottom: none !important; letter-spacing: 0.05em;
+    }
+    .nav-drawer .drawer-cta:hover { background: var(--gold-dk); color: var(--white) !important; }
 
     /* ── ANNOUNCEMENT BANNER ─────────────────────────── */
     .announcement {
@@ -578,10 +614,20 @@
       <a href="#resources">Resources</a>
       <a href="#membership" class="nav-cta">Join / Renew</a>
     </div>
-    <button class="nav-mobile-toggle" aria-label="Menu">
+    <button class="nav-mobile-toggle" id="menuToggle" aria-label="Menu" onclick="toggleMenu()">
       <span></span><span></span><span></span>
     </button>
   </nav>
+
+  <!-- Mobile drawer -->
+  <div class="nav-drawer" id="navDrawer">
+    <a href="#find" onclick="closeMenu()">Find a Lawyer</a>
+    <a href="#events" onclick="closeMenu()">Events</a>
+    <a href="#about" onclick="closeMenu()">About</a>
+    <a href="#leadership" onclick="closeMenu()">Leadership</a>
+    <a href="#resources" onclick="closeMenu()">Resources</a>
+    <a href="#membership" class="drawer-cta" onclick="closeMenu()">Join / Renew</a>
+  </div>
 
   <!-- Hero -->
   <section class="hero">
@@ -1020,6 +1066,26 @@
 
     // Initial render
     renderLawyers('all');
+
+    // ── Mobile menu ──────────────────────────────────────
+    function toggleMenu() {
+      const toggle = document.getElementById('menuToggle');
+      const drawer = document.getElementById('navDrawer');
+      toggle.classList.toggle('open');
+      drawer.classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('menuToggle').classList.remove('open');
+      document.getElementById('navDrawer').classList.remove('open');
+    }
+    // Close drawer on outside tap
+    document.addEventListener('click', e => {
+      const drawer = document.getElementById('navDrawer');
+      const toggle = document.getElementById('menuToggle');
+      if (drawer.classList.contains('open') && !drawer.contains(e.target) && !toggle.contains(e.target)) {
+        closeMenu();
+      }
+    });
 
     // ── Announcement banner ──────────────────────────────
     function closeAnnouncement() {
