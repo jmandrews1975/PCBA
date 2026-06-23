@@ -55,8 +55,13 @@
       width: 40px; height: 40px; flex-shrink: 0;
     }
     .nav-logo-text { line-height: 1.15; }
-    .nav-logo-text .org { font-family: var(--ff-serif); font-size: 1.05rem; font-weight: 600; color: var(--white); letter-spacing: 0.01em; }
-    .nav-logo-text .loc { font-size: 0.65rem; font-weight: 500; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; }
+    .nav-logo-text .org { font-family: var(--ff-serif); font-size: 1.05rem; font-weight: 600; color: var(--white); letter-spacing: 0.01em; white-space: nowrap; }
+    .nav-logo-text .loc { font-size: 0.65rem; font-weight: 500; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; }
+    @media (max-width: 480px) {
+      .nav-logo-text .org { font-size: 0.9rem; }
+      .nav-logo-text .loc { display: none; }
+      .nav { padding: 0 1rem; }
+    }
     .nav-links { display: flex; align-items: center; gap: 0.25rem; }
     .nav-links a {
       font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.75);
@@ -504,20 +509,29 @@
     /* ── ANNOUNCEMENT BANNER ─────────────────────────── */
     .announcement {
       background: var(--gold); color: var(--night);
-      text-align: center; padding: 0.6rem 2rem;
+      text-align: center; padding: 0.6rem 3rem;
       font-size: 0.8rem; font-weight: 600;
       position: fixed; top: 68px; left: 0; right: 0; z-index: 99;
-      display: flex; align-items: center; justify-content: center; gap: 1rem;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      white-space: nowrap; overflow: hidden;
+      min-height: 36px;
     }
-    .announcement a { color: var(--night); font-weight: 700; }
+    .announcement a { color: var(--night); font-weight: 700; text-decoration: underline; }
     .announcement-close {
-      position: absolute; right: 1rem;
+      position: absolute; right: 0.75rem;
       background: none; border: none; cursor: pointer;
-      font-size: 1.1rem; color: var(--night); opacity: 0.6;
+      font-size: 1.1rem; color: var(--night); opacity: 0.6; line-height: 1;
     }
     .announcement-close:hover { opacity: 1; }
+    .announcement .ann-full { display: inline; }
+    .announcement .ann-short { display: none; }
     body.has-announcement .hero { padding-top: calc(68px + 36px); }
     body.has-announcement .nav { top: 36px; }
+    @media (max-width: 600px) {
+      .announcement { font-size: 0.72rem; padding: 0.6rem 2.5rem; }
+      .announcement .ann-full { display: none; }
+      .announcement .ann-short { display: inline; }
+    }
 
     @media (max-width: 900px) {
       .about-grid { grid-template-columns: 1fr; }
@@ -538,8 +552,8 @@
 
   <!-- Announcement banner -->
   <div class="announcement" id="announcement">
-    📅 &nbsp;Annual Dinner — Saturday, June 28, 2025 · Registration now open
-    &nbsp;<a href="#events">Register →</a>
+    <span class="ann-full">📅 &nbsp;Annual Dinner — Saturday, June 28, 2025 · Registration now open &nbsp;<a href="#events">Register →</a></span>
+    <span class="ann-short">📅 Annual Dinner June 28 &nbsp;<a href="#events">Register →</a></span>
     <button class="announcement-close" onclick="closeAnnouncement()">✕</button>
   </div>
 
